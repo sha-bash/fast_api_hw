@@ -1,0 +1,32 @@
+version: '3.9'
+
+networks:
+  dev_network:
+
+services:
+
+  app:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: ${POSTGRES_HOST}  # Используйте имя сервиса db
+      POSTGRES_PORT: 5432  # Используйте порт 5432
+    depends_on:
+      - db
+    networks:
+      - dev_network
+
+  db:
+    image: postgres:16.2-alpine3.19
+    ports:
+      - "5431:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - dev_network
